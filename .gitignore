@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+backend/.env
+
+# Build files
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.db
+
+# Frontend build
+frontend/build/
+frontend/dist/
+
+# Coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Backend
+backend/node_modules/
+backend/.env
+
+# Python (if using streamlit)
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+
+# Streamlit
+.streamlit/

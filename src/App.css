@@ -1,0 +1,206 @@
+/* App.css - Zeen A Registration Styles */
+
+/* Reset and base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg, #f7f9fc);
+  margin: 0;
+  padding: 20px;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--accent, #aa3bff);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--border, #e5e4e7);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent, #aa3bff);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* Input autofill fix */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px var(--bg, #ffffff) inset !important;
+  -webkit-text-fill-color: var(--text-h, #08060d) !important;
+}
+
+/* Button hover effects */
+.btn-primary,
+button[type="submit"] {
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled),
+button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(170, 59, 255, 0.3);
+}
+
+.btn-primary:active:not(:disabled),
+button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Card animation */
+.card {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input focus glow */
+.input-field:focus {
+  box-shadow: 0 0 0 3px var(--accent-bg, rgba(170, 59, 255, 0.1));
+  border-color: var(--accent, #aa3bff);
+}
+
+/* Error state animation */
+.input-error {
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Success screen animation */
+.success-icon {
+  animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Modal overlay animation */
+.modal-overlay {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  #root {
+    padding: 12px;
+    align-items: flex-start;
+    padding-top: 20px;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  html,
+  body {
+    overflow-y: auto;
+  }
+}
+
+@media (max-height: 700px) {
+  #root {
+    align-items: flex-start;
+    padding-top: 20px;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  html,
+  body {
+    overflow-y: auto;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .btn-primary:hover:not(:disabled),
+  button[type="submit"]:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
+  }
+}
