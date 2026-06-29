@@ -205,19 +205,19 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
   return (
     <div style={{
       minHeight: '100vh',
-      width: '100%',
       background: '#f5f3ff',
       margin: 0,
       padding: 0,
       boxSizing: 'border-box',
     }}>
-      {/* Full Width Container - NO MAX WIDTH */}
+      {/* Full Width Container */}
       <div style={{
-        width: '100%',
+        maxWidth: '1440px',
+        margin: '0 auto',
         padding: '24px 32px',
         boxSizing: 'border-box',
       }}>
-        {/* Header - Full Width */}
+        {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -227,7 +227,6 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
           background: '#ffffff',
           borderRadius: '16px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          width: '100%',
         }}>
           <div>
             <h1 style={{
@@ -409,13 +408,12 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
         {/* Dashboard Content */}
         {activeTab === 'dashboard' && (
           <>
-            {/* Stats Cards - Full Width Grid */}
+            {/* Stats Cards */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
               gap: '16px',
               marginBottom: '24px',
-              width: '100%',
             }}>
               <div style={{
                 background: '#ffffff',
@@ -515,13 +513,12 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
               </div>
             </div>
 
-            {/* Users by Role + Quick Actions - Full Width */}
+            {/* Users by Role + Quick Actions */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: '2fr 1fr',
               gap: '16px',
               marginBottom: '24px',
-              width: '100%',
             }}>
               <div style={{
                 background: '#ffffff',
@@ -660,13 +657,12 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
               </div>
             </div>
 
-            {/* Recent Users with Search - Full Width */}
+            {/* Recent Users with Search */}
             <div style={{
               background: '#ffffff',
               borderRadius: '16px',
               padding: '24px',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              width: '100%',
             }}>
               <div style={{
                 display: 'flex',
@@ -694,7 +690,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
                         borderRadius: '10px',
                         border: '1px solid #e5e4e7',
                         fontSize: '13px',
-                        width: '220px',
+                        width: '200px',
                         outline: 'none',
                         transition: 'all 0.2s',
                       }}
@@ -889,7 +885,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
               background: '#ffffff',
               borderRadius: '24px',
               padding: '32px',
-              maxWidth: '1000px',
+              maxWidth: '700px',
               width: '100%',
               maxHeight: '80vh',
               overflowY: 'auto',
@@ -1088,31 +1084,31 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
             </div>
           </div>
         )}
-
-        <style>{`
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          body, html {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: #f5f3ff;
-          }
-          #root {
-            min-height: 100vh;
-            background: #f5f3ff;
-          }
-        `}</style>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        body, html {
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+          background: #f5f3ff;
+        }
+        #root {
+          min-height: 100vh;
+          background: #f5f3ff;
+        }
+      `}</style>
     </div>
   );
 };
