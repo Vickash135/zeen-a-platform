@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { patientQuestions } from '../../data/patientQuestions';
-import { coachQuestions } from '../../data/coachQuestions';
-import { familyQuestions } from '../../data/familyQuestions';
+import { patientQuestions } from '../../Data/patientQuestions';
+import { coachQuestions } from '../../Data/coachQuestions';
+import { familyQuestions } from '../../Data/familyQuestions';
 
 const Questionnaire = () => {
   const [questions, setQuestions] = useState([]);
