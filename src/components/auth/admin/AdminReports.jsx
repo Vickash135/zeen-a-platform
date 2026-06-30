@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { API_URL } from '../../config';
 
 const AdminReports = ({ onBack }) => {
   const [generating, setGenerating] = useState(false);
@@ -12,7 +13,7 @@ const AdminReports = ({ onBack }) => {
       const token = localStorage.getItem('adminToken');
       
       // Fetch users data
-      const usersResponse = await fetch('http://localhost:5000/api/admin/users', {
+      const usersResponse = await fetch(`${API_URL}/admin/users`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
@@ -27,7 +28,7 @@ const AdminReports = ({ onBack }) => {
       const usersWithAnswers = await Promise.all(
         users.map(async (user) => {
           try {
-            const response = await fetch(`http://localhost:5000/api/admin/user/${user.email}`, {
+            const response = await fetch(`${API_URL}/admin/user/${user.email}`, {
               headers: { 'Authorization': `Bearer ${token}` },
             });
             if (response.ok) {
@@ -66,21 +67,18 @@ const AdminReports = ({ onBack }) => {
       doc.text(`Total Users: ${users.length}`, 105, 59, { align: 'center' });
       
       // ============================================
-      // RESPONSE SUMMARY - FIXED CALCULATION
+      // RESPONSE SUMMARY
       // ============================================
       const totalUsers = users.length;
       const completed = users.filter(u => u.is_complete === true || u.is_complete === 1).length;
       
-      // FIX: Calculate average progress safely with proper number conversion
       let avgProgress = 0;
       if (totalUsers > 0) {
         let totalProgress = 0;
         let validUsers = 0;
         
         users.forEach(user => {
-          // Convert to number safely
           let progress = parseFloat(user.completion_percentage);
-          // If it's NaN or undefined, treat as 0
           if (isNaN(progress)) {
             progress = 0;
           } else {
@@ -89,7 +87,6 @@ const AdminReports = ({ onBack }) => {
           totalProgress += progress;
         });
         
-        // Only divide by valid users count
         avgProgress = validUsers > 0 ? Math.round(totalProgress / validUsers) : 0;
       }
       
@@ -144,7 +141,6 @@ const AdminReports = ({ onBack }) => {
 
       const userColumns = ['#', 'Name', 'Email', 'Role', 'Progress', 'Status'];
       const userRows = usersWithAnswers.map((user, index) => {
-        // Safely get progress
         let progress = parseFloat(user.completion_percentage);
         if (isNaN(progress)) progress = 0;
         
@@ -228,7 +224,6 @@ const AdminReports = ({ onBack }) => {
         const qData = questionMap[qKey];
         questionCount++;
         
-        // Check if we need a new page
         if (qY > 250) {
           doc.addPage();
           qY = 20;
@@ -240,27 +235,23 @@ const AdminReports = ({ onBack }) => {
           qY = 30;
         }
 
-        // Question header with number
         doc.setTextColor(50, 50, 50);
         doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
         const qNum = questionCount < 10 ? `0${questionCount}` : `${questionCount}`;
         
-        // Handle long question text with word wrap
         const questionText = qData.questionText || 'Question';
         const maxWidth = 180;
         const wrappedText = doc.splitTextToSize(`${qNum}. ${questionText}`, maxWidth);
         doc.text(wrappedText, 14, qY);
         qY += (wrappedText.length * 5) + 2;
 
-        // Response count
         doc.setTextColor(150, 150, 150);
         doc.setFontSize(8);
         doc.setFont(undefined, 'normal');
         doc.text(`Responses: ${qData.responses.length}`, 14, qY);
         qY += 5;
 
-        // Create a table for responses
         if (qData.responses.length > 0) {
           const responseRows = qData.responses.map((resp, idx) => [
             `${idx + 1}`,
@@ -332,7 +323,7 @@ const AdminReports = ({ onBack }) => {
         marginBottom: '20px',
       }}>
         <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a2e', margin: 0 }}>
-          Survey Report Generator
+          📄 Survey Report Generator
         </h2>
         <button
           onClick={onBack}
@@ -344,6 +335,17 @@ const AdminReports = ({ onBack }) => {
             cursor: 'pointer',
             color: '#6b6375',
             fontSize: '13px',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f5f3ff';
+            e.currentTarget.style.borderColor = '#aa3bff';
+            e.currentTarget.style.color = '#aa3bff';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = '#e5e4e7';
+            e.currentTarget.style.color = '#6b6375';
           }}
         >
           ← Back
@@ -416,35 +418,48 @@ const AdminReports = ({ onBack }) => {
           fontSize: '14px',
           transition: 'all 0.2s',
           boxShadow: '0 4px 16px rgba(170, 59, 255, 0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
         }}
         onMouseEnter={(e) => {
           if (!generating) {
             e.currentTarget.style.background = '#9333ea';
             e.currentTarget.style.boxShadow = '0 6px 24px rgba(170, 59, 255, 0.35)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
           }
         }}
         onMouseLeave={(e) => {
           if (!generating) {
             e.currentTarget.style.background = '#aa3bff';
             e.currentTarget.style.boxShadow = '0 4px 16px rgba(170, 59, 255, 0.25)';
+            e.currentTarget.style.transform = 'translateY(0)';
           }
         }}
       >
-        {generating ? 'Generating...' : 'Generate Clean Report'}
+        {generating ? '⏳ Generating...' : '📥 Generate Report'}
       </button>
 
       <div style={{
         marginTop: '16px',
         padding: '12px 16px',
-        background: '#f0fdf4',
+        background: '#f8f7f5',
         borderRadius: '8px',
-        border: '1px solid #bbf7d0',
+        border: '1px solid #e5e4e7',
       }}>
-        
-        <p style={{ fontSize: '11px', color: '#16a34a', margin: '4px 0 0 0' }}>
-          ✓ Properly calculates average progress by dividing by user count.
+        <p style={{ fontSize: '12px', color: '#6b6375', margin: 0 }}>
+          💡 Report includes all user answers grouped by question with email addresses.
+        </p>
+        <p style={{ fontSize: '11px', color: '#6b6375', margin: '4px 0 0 0' }}>
+          📊 Tables automatically paginate for large datasets.
         </p>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };

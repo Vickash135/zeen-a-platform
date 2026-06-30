@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URL } from '../config';
 
 const Registration = ({ onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
@@ -84,7 +85,7 @@ const Registration = ({ onSwitchToLogin }) => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +115,6 @@ const Registration = ({ onSwitchToLogin }) => {
     }
   };
 
-  // Terms Modal Component (same as before - keep it)
   const TermsModal = () => {
     if (!showTerms) return null;
     
@@ -364,7 +364,6 @@ const Registration = ({ onSwitchToLogin }) => {
         maxHeight: '94vh',
         overflowY: 'auto',
       }}>
-        {/* Header with Icon */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             width: '56px',
@@ -393,7 +392,6 @@ const Registration = ({ onSwitchToLogin }) => {
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {/* Name Row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label style={{ 
@@ -485,7 +483,6 @@ const Registration = ({ onSwitchToLogin }) => {
             </div>
           </div>
 
-          {/* Email */}
           <div>
             <label style={{ 
               display: 'block', 
@@ -531,7 +528,6 @@ const Registration = ({ onSwitchToLogin }) => {
             )}
           </div>
 
-          {/* Phone */}
           <div>
             <label style={{ 
               display: 'block', 
@@ -577,7 +573,6 @@ const Registration = ({ onSwitchToLogin }) => {
             )}
           </div>
 
-          {/* Password & Confirm */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label style={{ 
@@ -669,7 +664,6 @@ const Registration = ({ onSwitchToLogin }) => {
             </div>
           </div>
 
-          {/* Role */}
           <div>
             <label style={{ 
               display: 'block', 
@@ -718,7 +712,6 @@ const Registration = ({ onSwitchToLogin }) => {
             )}
           </div>
 
-          {/* Terms */}
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginTop: '4px' }}>
             <input
               type="checkbox"

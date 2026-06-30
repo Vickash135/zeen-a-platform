@@ -10,6 +10,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js';
+import { API_URL } from '../../config';
 
 ChartJS.register(
   ArcElement,
@@ -104,7 +105,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
   const fetchAnswerDistribution = async (questionId, role) => {
     const key = `${role}_${questionId}`;
     
-    // If already loading or has data, skip
     if (loadingAnswers[key] || answerData[key]) return;
     
     setLoadingAnswers(prev => ({ ...prev, [key]: true }));
@@ -112,9 +112,8 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
     try {
       const token = localStorage.getItem('adminToken');
       
-      // Fetch the actual answers for this question
       const response = await fetch(
-        `http://localhost:5000/api/admin/analytics/question-answers/${role}/${questionId}`,
+        `${API_URL}/admin/analytics/question-answers/${role}/${questionId}`,
         {
           headers: { 'Authorization': `Bearer ${token}` },
         }
@@ -124,9 +123,7 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
         const data = await response.json();
         console.log('Answer data for question:', data);
         
-        // Check if data has distribution array
         if (data && data.distribution && Array.isArray(data.distribution) && data.distribution.length > 0) {
-          // Use the distribution from backend
           const labels = data.distribution.map(item => item.answer || 'Unknown');
           const counts = data.distribution.map(item => item.count || 0);
           
@@ -140,7 +137,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
             }
           }));
         } else {
-          // No answers yet - show message
           setAnswerData(prev => ({
             ...prev,
             [key]: {
@@ -152,7 +148,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
           }));
         }
       } else {
-        // Error fetching - show message
         const errorText = await response.text();
         console.error('Error response:', errorText);
         setAnswerData(prev => ({
@@ -229,7 +224,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
       };
     }
     
-    // Fallback - show "No answers"
     return {
       labels: ['No answers recorded'],
       datasets: [{
@@ -259,27 +253,23 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
     }
   };
 
-  // Toggle question expansion
   const toggleQuestion = (index, question) => {
     if (expandedQuestion === index) {
       setExpandedQuestion(null);
     } else {
       setExpandedQuestion(index);
-      // Fetch answer distribution when expanding
       if (question && question.id) {
         fetchAnswerDistribution(question.id, question.role);
       }
     }
   };
 
-  // Get color for response rate
   const getResponseRateColor = (rate) => {
     if (rate >= 80) return '#22c55e';
     if (rate >= 50) return '#f59e0b';
     return '#ef4444';
   };
 
-  // Check if there are actual answers
   const hasRealAnswers = (question) => {
     const key = `${question.role}_${question.id}`;
     const data = answerData[key];
@@ -288,7 +278,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
 
   return (
     <div>
-      {/* Role Filter for Question Analytics */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -342,7 +331,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
         </div>
       </div>
 
-      {/* Charts Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
@@ -350,7 +338,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
         marginBottom: '24px',
       }}>
         
-        {/* Chart 1: Users by Role - PIE CHART */}
         <div style={{
           background: '#ffffff',
           borderRadius: '16px',
@@ -369,7 +356,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
           )}
         </div>
 
-        {/* Chart 2: Progress Distribution - DONUT CHART */}
         <div style={{
           background: '#ffffff',
           borderRadius: '16px',
@@ -389,9 +375,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
         </div>
       </div>
 
-      {/* ============================================
-          QUESTION RESPONSE RATE - PIE CHARTS FOR EACH QUESTION
-          ============================================ */}
       <div style={{
         background: '#ffffff',
         borderRadius: '16px',
@@ -446,7 +429,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                     }
                   }}
                 >
-                  {/* Question Header */}
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -519,7 +501,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
                   <div style={{
                     height: '4px',
                     background: '#f0edf2',
@@ -536,7 +517,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                     }} />
                   </div>
 
-                  {/* Expanded Content - Pie Chart */}
                   {isExpanded && (
                     <div style={{
                       marginTop: '16px',
@@ -549,7 +529,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                         gridTemplateColumns: '1fr 1fr',
                         gap: '16px',
                       }}>
-                        {/* Response Rate Pie */}
                         <div>
                           <p style={{
                             fontSize: '11px',
@@ -568,7 +547,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                           </div>
                         </div>
 
-                        {/* Answer Distribution Pie */}
                         <div>
                           <p style={{
                             fontSize: '11px',
@@ -599,7 +577,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                         </div>
                       </div>
 
-                      {/* Response Details */}
                       <div style={{
                         marginTop: '12px',
                         padding: '10px',
@@ -634,7 +611,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
                     </div>
                   )}
 
-                  {/* Expand/Collapse Indicator */}
                   <div style={{
                     textAlign: 'center',
                     marginTop: '8px',
@@ -658,7 +634,6 @@ const AdminCharts = ({ stats, questionAnalytics, dailyRegistrations }) => {
         )}
       </div>
 
-      {/* Insights Section */}
       <div style={{
         background: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)',
         borderRadius: '16px',

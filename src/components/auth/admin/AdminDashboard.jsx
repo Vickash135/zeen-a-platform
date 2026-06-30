@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import AdminCharts from './AdminCharts';
 import AdminReports from './AdminReports';
+import { API_URL } from '../../config';
 
 const AdminDashboard = ({ adminUser, onLogout }) => {
   const [stats, setStats] = useState({
@@ -36,7 +37,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
       }
 
       // Fetch stats
-      const statsResponse = await fetch('http://localhost:5000/api/admin/dashboard/stats', {
+      const statsResponse = await fetch(`${API_URL}/admin/dashboard/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -48,7 +49,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
       }
 
       // Fetch recent users
-      const usersResponse = await fetch('http://localhost:5000/api/admin/users', {
+      const usersResponse = await fetch(`${API_URL}/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -76,7 +77,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
     setLoadingAnalytics(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:5000/api/admin/analytics/questions', {
+      const response = await fetch(`${API_URL}/admin/analytics/questions`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -98,7 +99,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
     setSelectedUser(email);
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`http://localhost:5000/api/admin/user/${email}`, {
+      const response = await fetch(`${API_URL}/admin/user/${email}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -1084,31 +1085,31 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
             </div>
           </div>
         )}
-      </div>
 
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px) scale(0.98); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        body, html {
-          margin: 0;
-          padding: 0;
-          min-height: 100vh;
-          background: #f5f3ff;
-        }
-        #root {
-          min-height: 100vh;
-          background: #f5f3ff;
-        }
-      `}</style>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+          }
+          body, html {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #f5f3ff;
+          }
+          #root {
+            min-height: 100vh;
+            background: #f5f3ff;
+          }
+        `}</style>
+      </div>
     </div>
   );
 };

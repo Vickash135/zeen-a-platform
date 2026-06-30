@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { patientQuestions } from '../../Data/patientQuestions';
 import { coachQuestions } from '../../Data/coachQuestions';
 import { familyQuestions } from '../../Data/familyQuestions';
+import { API_URL } from '../config';
 
 const Questionnaire = () => {
   const [questions, setQuestions] = useState([]);
@@ -16,7 +17,6 @@ const Questionnaire = () => {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Get user data from localStorage
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const role = user.role || 'patient';
     const firstName = user.firstName || 'User';
@@ -26,7 +26,6 @@ const Questionnaire = () => {
     setUserName(firstName);
     setUserEmail(email);
 
-    // Load questions based on role
     let loadedQuestions = [];
     if (role === 'patient') loadedQuestions = patientQuestions;
     else if (role === 'coach') loadedQuestions = coachQuestions;
@@ -35,7 +34,6 @@ const Questionnaire = () => {
     setQuestions(loadedQuestions);
     setProgress({ total: loadedQuestions.length, answered: 0 });
 
-    // Load saved answers from localStorage - USER SPECIFIC
     const storageKey = `answers_${email}_${role}`;
     const savedAnswers = localStorage.getItem(storageKey);
     if (savedAnswers) {
@@ -59,7 +57,6 @@ const Questionnaire = () => {
     const newAnswers = { ...answers, [questionId]: value };
     setAnswers(newAnswers);
     
-    // Save to localStorage - USER SPECIFIC
     const storageKey = `answers_${userEmail}_${userRole}`;
     localStorage.setItem(storageKey, JSON.stringify(newAnswers));
     
@@ -70,7 +67,7 @@ const Questionnaire = () => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch('http://localhost:5000/api/questions/answer', {
+        await fetch(`${API_URL}/questions/answer`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -270,7 +267,6 @@ const Questionnaire = () => {
         maxHeight: '96vh',
         overflowY: 'auto',
       }}>
-        {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div>
             <span style={{
@@ -306,7 +302,6 @@ const Questionnaire = () => {
           </button>
         </div>
 
-        {/* Progress */}
         <div style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
             <span style={{ fontSize: '13px', fontWeight: '500', color: '#08060d' }}>
@@ -336,7 +331,6 @@ const Questionnaire = () => {
           </div>
         </div>
 
-        {/* Question */}
         <div style={{ marginBottom: '24px' }}>
           {currentQuestion.section && (
             <div style={{
@@ -361,7 +355,6 @@ const Questionnaire = () => {
           </h3>
         </div>
 
-        {/* Answer Input */}
         <div style={{ marginBottom: '24px' }}>
           {currentQuestion.type === 'text' && (
             <input
@@ -513,7 +506,6 @@ const Questionnaire = () => {
           )}
         </div>
 
-        {/* Navigation */}
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
           <button
             onClick={handlePrevious}

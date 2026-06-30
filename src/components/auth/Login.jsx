@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URL } from '../config';
 
 const Login = ({ onSwitchToRegister }) => {
   const [formData, setFormData] = useState({
@@ -65,7 +66,7 @@ const Login = ({ onSwitchToRegister }) => {
     
     try {
       // FIRST: Try admin login
-      const adminResponse = await fetch('http://localhost:5000/api/auth/admin/login', {
+      const adminResponse = await fetch(`${API_URL}/auth/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ const Login = ({ onSwitchToRegister }) => {
       }
 
       // SECOND: Try user login
-      const userResponse = await fetch('http://localhost:5000/api/auth/login', {
+      const userResponse = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,15 +101,10 @@ const Login = ({ onSwitchToRegister }) => {
       const userData = await userResponse.json();
 
       if (userResponse.ok) {
-        // Clear old user data
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        
-        // Store new user data
         localStorage.setItem('token', userData.token);
         localStorage.setItem('user', JSON.stringify(userData.user));
-        
-        // Redirect to questionnaire
         window.location.href = '/';
       } else {
         setLoginError(userData.error || 'Invalid email or password');
@@ -141,7 +137,6 @@ const Login = ({ onSwitchToRegister }) => {
         boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
         animation: 'fadeInUp 0.5s ease-out',
       }}>
-        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div style={{
             width: '56px',
@@ -170,7 +165,6 @@ const Login = ({ onSwitchToRegister }) => {
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Email */}
           <div>
             <label style={{ 
               display: 'block', 
@@ -216,7 +210,6 @@ const Login = ({ onSwitchToRegister }) => {
             )}
           </div>
 
-          {/* Password */}
           <div>
             <label style={{ 
               display: 'block', 
@@ -283,7 +276,6 @@ const Login = ({ onSwitchToRegister }) => {
             )}
           </div>
 
-          {/* Remember Me & Forgot Password */}
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
@@ -326,7 +318,6 @@ const Login = ({ onSwitchToRegister }) => {
             </a>
           </div>
 
-          {/* Login Error */}
           {loginError && (
             <div style={{
               background: '#fef2f2',
@@ -341,7 +332,6 @@ const Login = ({ onSwitchToRegister }) => {
             </div>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -378,7 +368,6 @@ const Login = ({ onSwitchToRegister }) => {
           </button>
         </form>
 
-        {/* Register Link */}
         <p style={{
           textAlign: 'center',
           fontSize: '14px',
